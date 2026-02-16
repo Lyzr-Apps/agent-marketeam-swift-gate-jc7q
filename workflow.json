@@ -1,0 +1,72 @@
+{
+  "workflow": {
+    "nodes": [
+      {
+        "id": "input_node",
+        "type": "Input",
+        "label": "User Input",
+        "nodeCategory": "input"
+      },
+      {
+        "id": "content_orchestrator",
+        "type": "Agent",
+        "label": "Content Orchestrator",
+        "nodeCategory": "agent",
+        "agent_id": "69939142b175ad1ab1aed346",
+        "agent_type": "manager",
+        "model": "openai/gpt-4.1",
+        "provider": "openai",
+        "managed_agents": ["69939123c1a177c86d6edac5", "69939123b0b67ea314b4e4f9"]
+      },
+      {
+        "id": "seo_research_agent",
+        "type": "Agent",
+        "label": "SEO Research Agent",
+        "nodeCategory": "agent",
+        "agent_id": "69939123c1a177c86d6edac5",
+        "agent_type": "sub-agent",
+        "model": "perplexity/sonar-pro",
+        "provider": "perplexity"
+      },
+      {
+        "id": "content_writer_agent",
+        "type": "Agent",
+        "label": "Content Writer Agent",
+        "nodeCategory": "agent",
+        "agent_id": "69939123b0b67ea314b4e4f9",
+        "agent_type": "sub-agent",
+        "model": "anthropic/claude-sonnet-4-5",
+        "provider": "anthropic"
+      },
+      {
+        "id": "graphics_generator",
+        "type": "Agent",
+        "label": "Graphics Generator Agent",
+        "nodeCategory": "agent",
+        "agent_id": "69939142b6bc6d320bbb0398",
+        "agent_type": "independent",
+        "model": "google/gemini-2.5-pro",
+        "provider": "google",
+        "has_image_output": true,
+        "image_output_config": {
+          "model": "gemini/gemini-3-pro-image-preview"
+        }
+      },
+      {
+        "id": "output_node",
+        "type": "Output",
+        "label": "Output",
+        "nodeCategory": "end"
+      }
+    ],
+    "edges": [
+      { "source": "input_node", "target": "content_orchestrator" },
+      { "source": "content_orchestrator", "target": "seo_research_agent" },
+      { "source": "content_orchestrator", "target": "content_writer_agent" },
+      { "source": "input_node", "target": "graphics_generator" },
+      { "source": "seo_research_agent", "target": "output_node" },
+      { "source": "content_writer_agent", "target": "output_node" },
+      { "source": "graphics_generator", "target": "output_node" }
+    ]
+  }
+}

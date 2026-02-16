@@ -1,0 +1,22 @@
+{
+  "agents": {
+    "seo_research_agent": {
+      "agent_id": "69939123c1a177c86d6edac5",
+      "type": "sub-agent"
+    },
+    "content_writer_agent": {
+      "agent_id": "69939123b0b67ea314b4e4f9",
+      "type": "sub-agent"
+    },
+    "content_orchestrator": {
+      "agent_id": "69939142b175ad1ab1aed346",
+      "type": "manager",
+      "managed_agents": ["69939123c1a177c86d6edac5", "69939123b0b67ea314b4e4f9"]
+    },
+    "graphics_generator": {
+      "agent_id": "69939142b6bc6d320bbb0398",
+      "type": "independent",
+      "has_image_output": true
+    }
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "agent_name": "Graphics Generator Agent",
+  "agent_id": "69939142b6bc6d320bbb0398",
+  "description": "Creates marketing visuals, blog hero images, social media graphics, and illustrations based on user descriptions or article context",
+  "agent_type": "json",
+  "accessor": "result",
+  "auto_generated": true,
+  "response_schema": {
+    "description": "string",
+    "style": "string",
+    "prompt_used": "string",
+    "suggestions": [
+      "string"
+    ]
+  },
+  "example_response": {
+    "description": "sample string",
+    "style": "sample string",
+    "prompt_used": "sample string",
+    "suggestions": [
+      "sample string"
+    ]
+  },
+  "has_module_outputs": true,
+  "module_outputs_example": {
+    "artifact_files": [
+      {
+        "file_url": "https://example.com/image.png"
+      }
+    ]
+  }
+}

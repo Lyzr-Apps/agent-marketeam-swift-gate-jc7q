@@ -1,0 +1,54 @@
+{
+  "agent_name": "Content Orchestrator",
+  "agent_id": "69939142b175ad1ab1aed346",
+  "description": "Coordinates the SEO research and content writing sub-agents, routes user briefs or URLs to appropriate subs, and aggregates the final SEO-optimized article or optimization report",
+  "agent_type": "json",
+  "accessor": "result",
+  "auto_generated": true,
+  "response_schema": {
+    "title": "string",
+    "meta_description": "string",
+    "article_content": "string",
+    "seo_score": "number",
+    "primary_keywords": [
+      "string"
+    ],
+    "secondary_keywords": [
+      "string"
+    ],
+    "keyword_usage_summary": "string",
+    "heading_structure": [
+      "string"
+    ],
+    "word_count": "number",
+    "readability_score": "number",
+    "improvement_notes": [
+      "string"
+    ],
+    "optimization_summary": "string",
+    "competitor_insights": "string"
+  },
+  "example_response": {
+    "title": "sample string",
+    "meta_description": "sample string",
+    "article_content": "sample string",
+    "seo_score": 0,
+    "primary_keywords": [
+      "sample string"
+    ],
+    "secondary_keywords": [
+      "sample string"
+    ],
+    "keyword_usage_summary": "sample string",
+    "heading_structure": [
+      "sample string"
+    ],
+    "word_count": 0,
+    "readability_score": 0,
+    "improvement_notes": [
+      "sample string"
+    ],
+    "optimization_summary": "sample string",
+    "competitor_insights": "sample string"
+  }
+}
