@@ -410,6 +410,13 @@ function ContentStudioScreen({
   const loadingIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
   const agentActivity = useLyzrAgentEvents(sessionId)
 
+  // Helper to pre-generate a session ID so WebSocket connects before API call
+  const createSessionId = useCallback(() => {
+    const id = `${CONTENT_AGENT_ID}-${Date.now().toString(36)}${Math.random().toString(36).slice(2, 8)}`
+    setSessionId(id)
+    return id
+  }, [])
+
   // Sample data effect
   useEffect(() => {
     if (sampleMode && !contentResult) {
@@ -466,12 +473,15 @@ function ContentStudioScreen({
     onAgentActive(CONTENT_AGENT_ID)
     startLoadingMessages(LOADING_MESSAGES_CONTENT)
 
+    // Pre-generate session ID and start WebSocket BEFORE the API call
+    const sid = createSessionId()
+    agentActivity.setProcessing(true)
+
     const kwString = keywords.length > 0 ? ` Keywords to include: ${keywords.join(', ')}.` : ''
     const message = `Write an SEO-optimized article about: ${topic.trim()}. Target audience: ${audience}. Tone: ${tone}.${kwString}`
 
     try {
-      const result = await callAIAgent(message, CONTENT_AGENT_ID)
-      if (result?.session_id) setSessionId(result.session_id)
+      const result = await callAIAgent(message, CONTENT_AGENT_ID, { session_id: sid })
 
       if (result?.success) {
         const data = result?.response?.result as ContentResult | undefined
@@ -499,8 +509,9 @@ function ContentStudioScreen({
       setLoading(false)
       onAgentActive(null)
       stopLoadingMessages()
+      agentActivity.setProcessing(false)
     }
-  }, [topic, audience, tone, keywords, startLoadingMessages, stopLoadingMessages, onHistoryAdd, onAgentActive])
+  }, [topic, audience, tone, keywords, startLoadingMessages, stopLoadingMessages, onHistoryAdd, onAgentActive, createSessionId, agentActivity])
 
   const handleOptimize = useCallback(async () => {
     const input = optimizeUrl.trim() || optimizeContent.trim()
@@ -511,13 +522,16 @@ function ContentStudioScreen({
     onAgentActive(CONTENT_AGENT_ID)
     startLoadingMessages(LOADING_MESSAGES_CONTENT)
 
+    // Pre-generate session ID and start WebSocket BEFORE the API call
+    const sid = createSessionId()
+    agentActivity.setProcessing(true)
+
     const message = optimizeUrl.trim()
       ? `Analyze and optimize this content for SEO. URL: ${optimizeUrl.trim()}`
       : `Analyze and optimize this content for SEO:\n\n${optimizeContent.trim()}`
 
     try {
-      const result = await callAIAgent(message, CONTENT_AGENT_ID)
-      if (result?.session_id) setSessionId(result.session_id)
+      const result = await callAIAgent(message, CONTENT_AGENT_ID, { session_id: sid })
 
       if (result?.success) {
         const data = result?.response?.result as ContentResult | undefined
@@ -545,8 +559,9 @@ function ContentStudioScreen({
       setLoading(false)
       onAgentActive(null)
       stopLoadingMessages()
+      agentActivity.setProcessing(false)
     }
-  }, [optimizeUrl, optimizeContent, startLoadingMessages, stopLoadingMessages, onHistoryAdd, onAgentActive])
+  }, [optimizeUrl, optimizeContent, startLoadingMessages, stopLoadingMessages, onHistoryAdd, onAgentActive, createSessionId, agentActivity])
 
   const handleCopy = useCallback(async () => {
     if (!contentResult?.article_content) return
@@ -710,7 +725,7 @@ function ContentStudioScreen({
             </Tabs>
           </Card>
 
-          {sessionId && (
+          {(loading || sessionId) && (
             <AgentActivityPanel {...agentActivity} />
           )}
         </div>
@@ -949,6 +964,13 @@ function GraphicsStudioScreen({
   const loadingIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
   const agentActivity = useLyzrAgentEvents(sessionId)
 
+  // Helper to pre-generate a session ID so WebSocket connects before API call
+  const createSessionId = useCallback(() => {
+    const id = `${GRAPHICS_AGENT_ID}-${Date.now().toString(36)}${Math.random().toString(36).slice(2, 8)}`
+    setSessionId(id)
+    return id
+  }, [])
+
   const styles = ['Modern', 'Minimalist', 'Bold', 'Illustrated', 'Photorealistic']
 
   useEffect(() => {
@@ -989,11 +1011,14 @@ function GraphicsStudioScreen({
     onAgentActive(GRAPHICS_AGENT_ID)
     startLoadingMessages()
 
+    // Pre-generate session ID and start WebSocket BEFORE the API call
+    const sid = createSessionId()
+    agentActivity.setProcessing(true)
+
     const message = `Create a ${selectedStyle.toLowerCase()} marketing graphic: ${description.trim()}`
 
     try {
-      const result = await callAIAgent(message, GRAPHICS_AGENT_ID)
-      if (result?.session_id) setSessionId(result.session_id)
+      const result = await callAIAgent(message, GRAPHICS_AGENT_ID, { session_id: sid })
 
       if (result?.success) {
         const data = result?.response?.result as Record<string, unknown> | undefined
@@ -1024,8 +1049,9 @@ function GraphicsStudioScreen({
       setLoading(false)
       onAgentActive(null)
       stopLoadingMessages()
+      agentActivity.setProcessing(false)
     }
-  }, [description, selectedStyle, startLoadingMessages, stopLoadingMessages, onHistoryAdd, onAgentActive])
+  }, [description, selectedStyle, startLoadingMessages, stopLoadingMessages, onHistoryAdd, onAgentActive, createSessionId, agentActivity])
 
   const handleDownloadImage = useCallback(async () => {
     if (!graphicsResult?.imageUrl) return
@@ -1098,7 +1124,7 @@ function GraphicsStudioScreen({
             </CardContent>
           </Card>
 
-          {sessionId && (
+          {(loading || sessionId) && (
             <AgentActivityPanel {...agentActivity} />
           )}
         </div>
